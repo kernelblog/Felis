@@ -1,7 +1,23 @@
 EXEC_ROOT="/usr"
-if [ $(echo $PREFIX | wc -c) -gt 2 ]
-then
-	EXEC_ROOT=$PREFIX
+
+# If PREFIX is meaningfully set (more than one character), use it as the execution root
+if [ $(echo "$PREFIX" | wc -c) -gt 2 ]; then
+    EXEC_ROOT="$PREFIX"
 fi
 
-python3 $EXEC_ROOT/share/felis/felis.py $@
+PYTHON_BIN="python3"
+FELIS_SCRIPT="$EXEC_ROOT/share/felis/felis.py"
+
+# If the Python binary exists and is executable
+if [ ! -x "$(command -v $PYTHON_BIN)" ]; then
+    echo "Error: Python is not available or not executable."
+    exit 1
+fi
+
+# If the felis.py script exists
+if [ ! -f "$FELIS_SCRIPT" ]; then
+    echo "Error: The felis.py script cannot be found at $FELIS_SCRIPT."
+    exit 1
+fi
+
+$PYTHON_BIN "$FELIS_SCRIPT" "$@"

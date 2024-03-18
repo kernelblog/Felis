@@ -1,0 +1,5 @@
+beautifulsoup4
+requests
+PrettyTable
+youtube_dl
+pyopenssl
